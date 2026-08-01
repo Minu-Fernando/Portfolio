@@ -36,13 +36,15 @@ export default function SkillsBento() {
 
           {/* Search Bar */}
           <div className="relative min-w-[280px]">
-            <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+            <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center" aria-hidden="true">
+              <Search className="block w-4 h-4 text-slate-400" />
+            </span>
             <input
               type="text"
               placeholder="Search skills (e.g. Altium, Python, ESP32)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 rounded-full bg-slate-900/80 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-all"
+              className="w-full h-11 pl-11 pr-4 rounded-full bg-slate-900/80 border border-white/10 text-white text-xs leading-none placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-all"
             />
           </div>
         </div>

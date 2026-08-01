@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Award, Mail, Phone, MapPin, Copy, Check, Send, Sparkles, Music, Globe } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { certificates, personalDetails } from '../data/portfolioData';
+import LeadershipGallery from './LeadershipGallery';
 
 export default function CertificationsContact() {
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -67,7 +68,7 @@ export default function CertificationsContact() {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 relative">
+    <section className="py-20 px-4 relative">
       <div className="max-w-6xl mx-auto">
         
         {/* Certifications Section */}
@@ -103,8 +104,10 @@ export default function CertificationsContact() {
           </div>
         </div>
 
+        <LeadershipGallery />
+
         {/* Contact Bento Box */}
-        <div className="bento-container">
+        <div id="contact" className="bento-container scroll-mt-28">
           
           {/* Left Contact Card */}
           <motion.div

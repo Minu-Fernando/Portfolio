@@ -33,24 +33,24 @@ export default function ExperienceTimeline() {
             transition={{ duration: 0.5 }}
             className="col-12 framer-card p-8 md:p-10 bg-gradient-to-r from-violet-950/50 via-slate-900/90 to-slate-900/90 border-violet-500/30"
           >
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6 pb-6 border-b border-white/10">
-              <div>
+            <div className="mb-7 pb-7 border-b border-white/10">
+              <div className="mb-4">
                 <span className="inline-block px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold font-mono mb-2">
                   🏆 National Award Winner
                 </span>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white">
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
                   {leadershipExperiences[0].role}
                 </h3>
-                <p className="text-cyan-300 font-semibold text-sm">{leadershipExperiences[0].organization} ({leadershipExperiences[0].period})</p>
+                <p className="text-cyan-300 font-semibold text-sm">{leadershipExperiences[0].organization} · {leadershipExperiences[0].period}</p>
               </div>
-              <span className="px-4 py-2 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm font-semibold text-center">
-                {leadershipExperiences[0].highlight}
+              <span className="inline-block px-4 py-2 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm font-semibold">
+                {leadershipExperiences[0].badge}
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="grid md:grid-cols-3 gap-4">
               {leadershipExperiences[0].description.map((desc, i) => (
-                <div key={i} className="flex items-start gap-3 text-slate-300 text-sm leading-relaxed">
+                <div key={i} className="flex items-start gap-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] p-4 text-slate-300 text-sm leading-relaxed">
                   <CheckCircle2 className="w-4 h-4 text-violet-400 shrink-0 mt-1" />
                   <span>{desc}</span>
                 </div>

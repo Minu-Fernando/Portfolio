@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { personalDetails } from '../data/portfolioData';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -17,6 +18,32 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (location.pathname !== '/') return undefined;
+
+    const sectionIds = ['home', 'about', 'skills', 'contact'];
+    const updateActiveSection = () => {
+      const marker = window.scrollY + window.innerHeight * 0.34;
+      const sections = sectionIds
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
+      const current = sections.reduce((active, section) => (
+        section.offsetTop <= marker ? section : active
+      ), sections[0]);
+
+      if (current) setActiveSection(current.id);
+    };
+
+    updateActiveSection();
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    window.addEventListener('resize', updateActiveSection);
+
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection);
+      window.removeEventListener('resize', updateActiveSection);
+    };
+  }, [location.pathname]);
 
   const handleNavClick = (e, href) => {
     if (href.startsWith('/#')) {
@@ -66,7 +93,12 @@ export default function Navbar() {
           {/* Nav Links */}
           <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.href;
+              const sectionId = link.href.startsWith('/#') ? link.href.slice(2) : null;
+              const isActive = link.href === '/'
+                ? location.pathname === '/' && activeSection === 'home'
+                : sectionId
+                  ? location.pathname === '/' && activeSection === sectionId
+                  : location.pathname === link.href;
               return (
                 <Link
                   key={link.name}
@@ -81,23 +113,6 @@ export default function Navbar() {
               );
             })}
           </nav>
-
-          {/* Right Action */}
-          <div className="hidden md:flex items-center gap-3">
-            {/* <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span className="hidden sm:inline">Available for Internships</span>
-            </div> */}
-            
-            <a
-              href="/#contact"
-              onClick={(e) => handleNavClick(e, '/#contact')}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-medium transition-all"
-            >
-              <span>Contact</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-slate-300" />
-            </a>
-          </div>
 
           {/* Mobile Menu Button */}
           <button

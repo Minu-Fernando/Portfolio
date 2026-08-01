@@ -40,7 +40,7 @@ export default function Hero() {
   }, [displayText, isDeleting, currentRoleIndex]);
 
   return (
-    <section className="pt-24 lg:pt-32 pb-16 px-4 relative">
+    <section id="home" className="pt-24 lg:pt-32 pb-16 px-4 relative">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           

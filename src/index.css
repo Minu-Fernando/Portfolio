@@ -200,6 +200,111 @@ body::before {
   color: #c4b5fd;
 }
 
+.gallery-panorama {
+  position: relative;
+  height: clamp(245px, 34vw, 390px);
+  overflow: hidden;
+  perspective: 1100px;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.gallery-card {
+  --gallery-scale: 0.68;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(210px, 30vw, 390px);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  opacity: 0;
+  z-index: 1;
+  transform: translate(-50%, -50%) translateX(calc(var(--gallery-position) * clamp(170px, 29vw, 355px))) scale(var(--gallery-scale));
+  transition:
+    transform 2400ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 1800ms ease-in-out,
+    filter 1800ms ease-in-out,
+    border-color 1800ms ease-in-out,
+    box-shadow 1800ms ease-in-out;
+  filter: saturate(0.62) brightness(0.72);
+  will-change: transform;
+}
+
+.gallery-card-far {
+  --gallery-scale: 0.58;
+  opacity: 0.34;
+  filter: saturate(0.5) brightness(0.6);
+}
+
+.gallery-card-reset {
+  transition: none;
+}
+
+.gallery-card-near {
+  --gallery-scale: 0.82;
+  opacity: 0.76;
+  z-index: 2;
+  filter: saturate(0.82) brightness(0.84);
+}
+
+.gallery-card-active {
+  --gallery-scale: 1;
+  opacity: 1;
+  z-index: 3;
+  border-color: rgba(129, 140, 248, 0.38);
+  filter: none;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38), 0 0 40px rgba(99, 102, 241, 0.1);
+}
+
+.gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-card-active:hover img { transform: scale(1.045); }
+
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.gallery-dots button {
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 0;
+  border-radius: 9999px;
+  background: #475569;
+  cursor: pointer;
+  transition: width 250ms ease, background 250ms ease;
+}
+
+.gallery-dots button.is-active {
+  width: 1.5rem;
+  background: #818cf8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-card { transition-duration: 0.01ms; }
+}
+
+@media (max-width: 639px) {
+  .gallery-panorama { height: 255px; }
+  .gallery-card {
+    width: 225px;
+    transform: translate(-50%, -50%) translateX(calc(var(--gallery-position) * 176px)) scale(var(--gallery-scale));
+  }
+}
+
 @media (max-width: 767px) {
   .bento-container > [class*='col-'] {
     grid-column: 1 / -1;
