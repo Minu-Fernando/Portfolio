@@ -8,6 +8,8 @@ export default function CertificationsContact() {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   const handleCopyEmail = () => {
@@ -24,14 +26,44 @@ export default function CertificationsContact() {
     setTimeout(() => setCopiedPhone(false), 2500);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormSubmitted(true);
-    confetti({ particleCount: 80, spread: 100, origin: { y: 0.7 } });
-    setTimeout(() => {
-      setFormSubmitted(false);
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/minayafh@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `Portfolio contact from ${formData.name}`
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to send message');
+      }
+
+      setFormSubmitted(true);
+      confetti({ particleCount: 80, spread: 100, origin: { y: 0.7 } });
       setFormData({ name: '', email: '', message: '' });
-    }, 4000);
+      setTimeout(() => {
+        setFormSubmitted(false);
+      }, 4000);
+    } catch (error) {
+      const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`);
+      const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
+      window.location.href = `mailto:${personalDetails.email}?subject=${subject}&body=${body}`;
+      setSubmitError('The message could not be sent automatically, so your email app was opened instead.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -179,6 +211,7 @@ export default function CertificationsContact() {
                   </label>
                   <input
                     type="text"
+                    name="name"
                     required
                     placeholder="e.g. Dr. Alex Morgan"
                     value={formData.name}
@@ -193,6 +226,7 @@ export default function CertificationsContact() {
                   </label>
                   <input
                     type="email"
+                    name="email"
                     required
                     placeholder="alex@example.com"
                     value={formData.email}
@@ -207,6 +241,7 @@ export default function CertificationsContact() {
                   </label>
                   <textarea
                     required
+                    name="message"
                     rows="4"
                     placeholder="Hi Minaya, I would like to discuss an engineering opportunity..."
                     value={formData.message}
@@ -215,8 +250,12 @@ export default function CertificationsContact() {
                   ></textarea>
                 </div>
 
-                <button type="submit" className="btn-primary w-full justify-center">
-                  <span>Send Message</span>
+                {submitError && (
+                  <p className="text-sm text-amber-300">{submitError}</p>
+                )}
+
+                <button type="submit" disabled={isSubmitting} className="btn-primary w-full justify-center disabled:opacity-70 disabled:cursor-not-allowed">
+                  <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
                   <Send className="w-4 h-4" />
                 </button>
               </form>
