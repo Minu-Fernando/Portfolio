@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Users } from 'lucide-react';
+import { Images, Users } from 'lucide-react';
 
 const galleryPhotos = [
-  { src: '/im1.jpg', alt: 'Team integration session' },
-  { src: '/im2.jpg', alt: 'Team project showcase' },
-  { src: '/im3.jpg', alt: 'Collaborative project work' },
-  { src: '/im4.jpg', alt: 'Project achievement' },
-  { src: '/im5.jpg', alt: 'Team engineering activity' },
+  { src: '/images/im1.jpg', alt: 'Team integration session'},
+  { src: '/images/im2.jpg', alt: 'Team project showcase'},
+  { src: '/images/im3.jpg', alt: 'Collaborative project work'},
+  { src: '/images/im4.jpg', alt: 'Project achievement'},
+  { src: '/images/im5.jpg', alt: 'Team engineering activity'},
 ];
 
 export default function LeadershipGallery() {
@@ -63,6 +63,10 @@ export default function LeadershipGallery() {
               onClick={() => setActiveIndex(index)}
             >
               <img src={photo.src} alt={photo.alt} loading="lazy" />
+              <figcaption>
+                <Images className="w-3.5 h-3.5" />
+                {photo.caption}
+              </figcaption>
             </figure>
           );
         })}
@@ -75,7 +79,7 @@ export default function LeadershipGallery() {
             key={photo.src}
             className={index === activeIndex ? 'is-active' : ''}
             onClick={() => setActiveIndex(index)}
-            aria-label={`Show image ${index + 1}: ${photo.alt}`}
+            aria-label={`Show image ${index + 1}: ${photo.caption}`}
           />
         ))}
       </div>
